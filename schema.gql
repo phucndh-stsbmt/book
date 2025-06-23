@@ -1,0 +1,199 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Author {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Book {
+  category: Category!
+  coverImageUrl: String!
+  createdAt: DateTime!
+  description: String!
+  id: Int!
+  isActive: Boolean!
+  isbn: String!
+  language: String!
+  page: Float!
+  price: Float!
+  publicationDate: DateTime!
+  publisher: Publisher!
+  stockQuantity: Float!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type BookAuthor {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Category {
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  isActive: Boolean!
+  name: String!
+  slug: String!
+  updatedAt: DateTime!
+}
+
+input CreateAuthorInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateBookAuthorInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateBookInput {
+  author: String!
+  categoryId: Int!
+  description: String
+  isAvailable: Boolean
+  isbn: String!
+  price: Float!
+  title: String!
+}
+
+input CreateCategoryInput {
+  description: String!
+  isActive: Boolean!
+  name: String!
+  slug: String!
+}
+
+input CreatePublisherInput {
+  address: String
+  email: String
+  name: String!
+  phone: String
+}
+
+input CreateUserInput {
+  address: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  name: String!
+  password: String!
+  phone: String!
+  role: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createAuthor(createAuthorInput: CreateAuthorInput!): Author!
+  createBook(createBookInput: CreateBookInput!): Book!
+  createBookAuthor(createBookAuthorInput: CreateBookAuthorInput!): BookAuthor!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  createPublisher(createPublisherInput: CreatePublisherInput!): Publisher!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeAuthor(id: Int!): Author!
+  removeBook(id: Int!): Book!
+  removeBookAuthor(id: Int!): BookAuthor!
+  removeCategory(id: Int!): Category!
+  removePublisher(id: Int!): Publisher!
+  removeUser(id: Int!): User!
+  updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
+  updateBook(updateBookInput: UpdateBookInput!): Book!
+  updateBookAuthor(updateBookAuthorInput: UpdateBookAuthorInput!): BookAuthor!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  updatePublisher(updatePublisherInput: UpdatePublisherInput!): Publisher!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Publisher {
+  address: String
+  email: String
+  id: Int!
+  name: String!
+  phone: String
+}
+
+type Query {
+  author(id: Int!): Author!
+  authors: [Author!]!
+  book(id: Int!): Book!
+  bookAuthor(id: Int!): BookAuthor!
+  bookAuthors: [BookAuthor!]!
+  books: [Book!]!
+  categories: [Category!]!
+  category(id: Int!): Category!
+  publisher(id: Int!): Publisher!
+  publishers: [Publisher!]!
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+input UpdateAuthorInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateBookAuthorInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateBookInput {
+  author: String
+  categoryId: Int
+  description: String
+  id: Int!
+  isAvailable: Boolean
+  isbn: String
+  price: Float
+  title: String
+}
+
+input UpdateCategoryInput {
+  description: String
+  id: Int!
+  isActive: Boolean
+  name: String
+  slug: String
+}
+
+input UpdatePublisherInput {
+  address: String
+  email: String
+  id: Int!
+  name: String
+  phone: String
+}
+
+input UpdateUserInput {
+  address: String
+  email: String
+  first_name: String
+  id: Int!
+  last_name: String
+  name: String
+  password: String
+  phone: String
+  role: String
+}
+
+type User {
+  address: String!
+  createdAt: DateTime!
+  email: String!
+  first_name: String!
+  id: Int!
+  last_name: String!
+  name: String!
+  phone: String!
+  role: String!
+  updatedAt: DateTime!
+}
