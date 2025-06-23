@@ -5,6 +5,7 @@ import { User } from '../users/entities/user.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Book } from '../books/entities/book.entity';
 import { Publisher } from '../publishers/entities/publisher.entity';
+import { Author } from '../authors/entities/author.entity';
 
 export const databaseModule = TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
@@ -15,7 +16,7 @@ export const databaseModule = TypeOrmModule.forRootAsync({
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_DATABASE'),
-      entities: [User, Category, Book, Publisher],
+      entities: [User, Category, Book, Publisher, Author],
       synchronize: configService.get('NODE_ENV') === 'development',
       logging: configService.get('NODE_ENV') === 'development',
     }),

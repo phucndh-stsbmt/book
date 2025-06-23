@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAuthorInput } from './dto/create-author.input';
 import { UpdateAuthorInput } from './dto/update-author.input';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Author } from './entities/author.entity';
 
 @Injectable()
 export class AuthorsService {
-  create(createAuthorInput: CreateAuthorInput) {
-    return 'This action adds a new author';
+  constructor(
+    @InjectRepository(Author)
+    private authorRepository: Repository<Author>,
+  ) {}
+
+  async create(createAuthorInput: CreateAuthorInput): Promise<Author> {
+    const author = this.authorRepository.create(createAuthorInput);
+    return this.authorRepository.save(author);
   }
 
-  findAll() {
-    return `This action returns all authors`;
+  async findAll(): Promise<Author[]> {
+    return this.authorRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} author`;
+  async findOne(id: number): Promise<Author> {
+    const author = await this.authorRepository.findOne({ where: { id } });
+    if (!author) {
+      throw new NotFoundException('Author not found');
+    }
+    return author;
   }
 
-  update(id: number, updateAuthorInput: UpdateAuthorInput) {
-    return `This action updates a #${id} author`;
+  async update(
+    id: number,
+    updateAuthorInput: Partial<Omit<UpdateAuthorInput, 'id'>>,
+  ): Promise<Author> {
+    const author = await this.authorRepository.findOne({ where: { id } });
+    if (!author) {
+      throw new NotFoundException('Author not found');
+    }
+    return this.authorRepository.save({ ...author, ...updateAuthorInput });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} author`;
+  async remove(id: number): Promise<Author> {
+    const author = await this.authorRepository.findOne({ where: { id } });
+    if (!author) {
+      throw new NotFoundException('Author not found');
+    }
+    await this.authorRepository.remove(author);
+    return author;
   }
 }

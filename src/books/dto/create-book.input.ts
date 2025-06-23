@@ -1,47 +1,71 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { InputType, Field, Int } from '@nestjs/graphql';
 import {
   IsNotEmpty,
   IsString,
   IsNumber,
-  IsOptional,
   IsBoolean,
+  IsDate,
 } from 'class-validator';
 
 @InputType()
 export class CreateBookInput {
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  title: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  author: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsNumber()
-  price: number;
-
-  @Field()
+  @Field(() => String)
   @IsNotEmpty()
   @IsString()
   isbn: string;
 
-  @Field({ nullable: true })
-  @IsOptional()
+  @Field(() => String)
+  @IsNotEmpty()
+  @IsString()
+  title: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+
+  @Field(() => Number)
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @Field(() => Number)
+  @IsNotEmpty()
+  @IsNumber()
+  stockQuantity: number;
+
+  @Field(() => Number)
+  @IsNotEmpty()
+  @IsNumber()
+  page: number;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  @IsString()
+  language: string;
+
+  @Field(() => Date)
+  @IsNotEmpty()
+  @IsDate()
+  publicationDate: Date;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  @IsString()
+  coverImageUrl: string;
+
+  @Field(() => Boolean)
+  @IsNotEmpty()
   @IsBoolean()
-  isAvailable?: boolean;
+  isActive: boolean;
 
   @Field(() => Int)
   @IsNotEmpty()
   @IsNumber()
   categoryId: number;
+
+  @Field(() => Int)
+  @IsNotEmpty()
+  @IsNumber()
+  publisherId: number;
 }

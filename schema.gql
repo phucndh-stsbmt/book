@@ -3,8 +3,15 @@
 # ------------------------------------------------------
 
 type Author {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  biography: String!
+  createdAt: DateTime!
+  dateOfBirth: DateTime!
+  dateOfDeath: DateTime
+  id: Int!
+  imageUrl: String
+  name: String!
+  nationality: String!
+  updatedAt: DateTime!
 }
 
 type Book {
@@ -41,8 +48,12 @@ type Category {
 }
 
 input CreateAuthorInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  biography: String!
+  dateOfBirth: DateTime!
+  dateOfDeath: DateTime
+  imageUrl: String
+  name: String!
+  nationality: String!
 }
 
 input CreateBookAuthorInput {
@@ -51,12 +62,17 @@ input CreateBookAuthorInput {
 }
 
 input CreateBookInput {
-  author: String!
   categoryId: Int!
-  description: String
-  isAvailable: Boolean
+  coverImageUrl: String!
+  description: String!
+  isActive: Boolean!
   isbn: String!
+  language: String!
+  page: Float!
   price: Float!
+  publicationDate: DateTime!
+  publisherId: Int!
+  stockQuantity: Float!
   title: String!
 }
 
@@ -135,9 +151,13 @@ type Query {
 }
 
 input UpdateAuthorInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  biography: String
+  dateOfBirth: DateTime
+  dateOfDeath: DateTime
   id: Int!
+  imageUrl: String
+  name: String
+  nationality: String
 }
 
 input UpdateBookAuthorInput {
@@ -147,13 +167,18 @@ input UpdateBookAuthorInput {
 }
 
 input UpdateBookInput {
-  author: String
   categoryId: Int
+  coverImageUrl: String
   description: String
   id: Int!
-  isAvailable: Boolean
+  isActive: Boolean
   isbn: String
+  language: String
+  page: Float
   price: Float
+  publicationDate: DateTime
+  publisherId: Int
+  stockQuantity: Float
   title: String
 }
 
