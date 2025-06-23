@@ -1,0 +1,97 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Book {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Category {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateBookInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateUserInput {
+  address: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  name: String!
+  password: String!
+  phone: String!
+  role: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createBook(createBookInput: CreateBookInput!): Book!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeBook(id: Int!): Book!
+  removeCategory(id: Int!): Category!
+  removeUser(id: Int!): User!
+  updateBook(updateBookInput: UpdateBookInput!): Book!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  book(id: Int!): Book!
+  books: [Book!]!
+  categories: [Category!]!
+  category(id: Int!): Category!
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+input UpdateBookInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateUserInput {
+  address: String
+  email: String
+  first_name: String
+  id: Int!
+  last_name: String
+  name: String
+  password: String
+  phone: String
+  role: String
+}
+
+type User {
+  address: String!
+  createdAt: DateTime!
+  email: String!
+  first_name: String!
+  id: Int!
+  last_name: String!
+  name: String!
+  phone: String!
+  role: String!
+  updatedAt: DateTime!
+}
