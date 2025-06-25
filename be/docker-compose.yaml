@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: bookstore_redis
+    hostname: redis
+    ports:
+      - '6379:6379'
+    command: redis-server
+    volumes:
+      - redis_data:/data
+    networks:
+      - bookstore_network
+    restart: unless-stopped
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: bookstore_redis_commander
+    hostname: redis-commander
+    ports:
+      - '8081:8081'
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0
+    networks:
+      - bookstore_network
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+networks:
+  bookstore_network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
