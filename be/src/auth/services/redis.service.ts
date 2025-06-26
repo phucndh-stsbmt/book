@@ -132,4 +132,40 @@ export class RedisService implements OnModuleInit {
     const keys = await this.client.keys(pattern);
     return keys.map((key) => key.split(':')[2]);
   }
+
+  // Lưu thông tin role của user
+  async cacheUserRole(userId: number, role: string, ttl: number = 1800): Promise<void> {
+    const key = `user:${userId}:role`;
+    await this.client.setex(key, ttl, role);
+  }
+
+  // Lấy role của user từ cache
+  async getUserRole(userId: number): Promise<string | null> {
+    const key = `user:${userId}:role`;
+    return await this.client.get(key);
+  }
+
+   // Cache thông tin user đầy đủ (bao gồm role)
+   async cacheUserInfo(userId: number, userInfo: any, ttl: number = 1800): Promise<void> {
+    const key = `user:${userId}:info`;
+    await this.client.setex(key, ttl, JSON.stringify(userInfo));
+    
+    // Cache role riêng để query nhanh
+    if (userInfo.role) {
+      await this.cacheUserRole(userId, userInfo.role, ttl);
+    }
+  }
+
+  // Lấy thông tin user từ cache
+  async getUserInfo(userId: number): Promise<any | null> {
+    const key = `user:${userId}:info`;
+    const result = await this.client.get(key);
+    return result ? JSON.parse(result) : null;
+  }
+
+  // Kiểm tra user có phải admin không (từ cache)
+  async isUserAdmin(userId: number): Promise<boolean> {
+    const role = await this.getUserRole(userId);
+    return role === 'admin';
+  }
 }

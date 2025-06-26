@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../../users/entities/user.entity';
 import { TokenService } from './token.service';
 import { RedisService } from './redis.service';
+import { RoleCacheService } from './role-cache.service';
 import { LoginInput } from '../dto/login.input';
 import { RegisterInput } from '../dto/register.input';
 
@@ -23,9 +24,10 @@ export class AuthService {
 
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-    private tokenService: TokenService,
-    private redisService: RedisService,
+    private readonly userRepository: Repository<User>,
+    private readonly tokenService: TokenService,
+    private readonly redisService: RedisService,
+    private readonly roleCacheService: RoleCacheService,
   ) {}
 
   async register(registerInput: RegisterInput) {

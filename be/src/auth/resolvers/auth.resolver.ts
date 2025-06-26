@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { GqlAuthGuard } from '../guards/gql-auth.guard';
+import { Public } from '../../common/decorators/public.decorator';
 import {
   LoginInput,
   RegisterInput,
@@ -22,6 +18,7 @@ export class AuthResolver {
   constructor(private authService: AuthService) {}
 
   @Mutation(() => RegisterResponse)
+  @Public()
   async register(
     @Args('input') registerInput: RegisterInput,
   ): Promise<RegisterResponse> {
@@ -32,11 +29,13 @@ export class AuthResolver {
   }
 
   @Mutation(() => LoginResponse)
+  @Public()
   async login(@Args('input') loginInput: LoginInput) {
     return this.authService.login(loginInput);
   }
 
   @Mutation(() => RefreshResponse)
+  @Public()
   async refreshTokens(@Args('refreshToken') refreshToken: string) {
     return this.authService.refreshTokens(refreshToken);
   }

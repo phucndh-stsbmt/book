@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './services/auth.service';
 import { TokenService } from './services/token.service';
 import { RedisService } from './services/redis.service';
+import { RoleCacheService } from './services/role-cache.service';
 
 // Resolvers
 import { AuthResolver } from './resolvers/auth.resolver';
@@ -42,6 +43,7 @@ import { User } from '../users/entities/user.entity'; // Hoặc đường dẫn 
     AuthService,
     TokenService,
     RedisService,
+    RoleCacheService,
     AuthResolver,
     JwtStrategy,
   ],
@@ -49,6 +51,7 @@ import { User } from '../users/entities/user.entity'; // Hoặc đường dẫn 
     AuthService,
     TokenService,
     RedisService,
+    RoleCacheService,
     JwtStrategy,
     PassportModule,
   ],
