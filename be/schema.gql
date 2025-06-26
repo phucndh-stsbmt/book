@@ -87,6 +87,7 @@ input CreateCategoryInput {
 input CreatePublisherInput {
   address: String
   email: String
+  isActive: Boolean
   name: String!
   phone: String
 }
@@ -154,6 +155,7 @@ type Publisher {
   address: String
   email: String
   id: Int!
+  isActive: Boolean
   name: String!
   phone: String
 }
@@ -233,6 +235,7 @@ input UpdatePublisherInput {
   address: String
   email: String
   id: Int!
+  isActive: Boolean
   name: String
   phone: String
 }

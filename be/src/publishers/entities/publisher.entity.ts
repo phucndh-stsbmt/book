@@ -23,4 +23,8 @@ export class Publisher {
   @Field({ nullable: true })
   @Column({ nullable: true })
   email?: string;
+
+  @Field({ nullable: true })
+  @Column({ default: true })
+  isActive?: boolean;
 }
