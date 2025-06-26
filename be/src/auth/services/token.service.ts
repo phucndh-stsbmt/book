@@ -123,6 +123,15 @@ export class TokenService {
         secret: process.env.JWT_SECRET,
       }) as { sub: number; jti: string };
 
+      // 🔒 KIỂM TRA BLACKLIST TRƯỚC - Nếu tokenId bị revoked thì không cho refresh
+      const isAccessTokenBlacklisted = await this.redisService.isInBlacklist(payload.jti);
+      const isRefreshTokenBlacklisted = await this.redisService.isRefreshTokenBlacklisted(payload.jti);
+      
+      if (isAccessTokenBlacklisted || isRefreshTokenBlacklisted) {
+        this.logger.warn(`Token pair ${payload.jti} is blacklisted (access: ${isAccessTokenBlacklisted}, refresh: ${isRefreshTokenBlacklisted})`);
+        return null;
+      }
+
       // Kiểm tra refresh token trong Redis
       const storedRefreshToken = await this.redisService.getRefreshToken(
         payload.sub,
@@ -167,22 +176,30 @@ export class TokenService {
   }
 
   async revokeToken(userId: number, tokenId: string): Promise<void> {
-    // Thêm vào blacklist (7 ngày để đảm bảo token không được sử dụng lại)
-    await this.redisService.addToBlacklist(tokenId, 7 * 24 * 60 * 60);
+    const ttl = 7 * 24 * 60 * 60; // 7 ngày
+    
+    // 🔒 Blacklist CẢ ACCESS TOKEN VÀ REFRESH TOKEN
+    await this.redisService.addToBlacklist(tokenId, ttl); // Access token blacklist
+    await this.redisService.blacklistRefreshToken(tokenId, ttl); // Refresh token blacklist
+    
     // Xóa khỏi whitelist
     await this.redisService.removeFromWhitelist(userId, tokenId);
-    // Xóa refresh token
+    // Xóa refresh token khỏi Redis
     await this.redisService.removeRefreshToken(userId, tokenId);
 
-    this.logger.log(`Revoked token ${tokenId} for user ${userId}`);
+    this.logger.log(`Revoked BOTH access and refresh tokens ${tokenId} for user ${userId}`);
   }
 
   async revokeAllTokens(userId: number): Promise<void> {
+    const ttl = 7 * 24 * 60 * 60; // 7 ngày
+    
     // Lấy tất cả active tokens
     const activeTokens = await this.redisService.getUserActiveTokens(userId);
-    // Blacklist tất cả tokens
+    
+    // 🔒 Blacklist CẢ ACCESS VÀ REFRESH TOKENS
     for (const tokenId of activeTokens) {
-      await this.redisService.addToBlacklist(tokenId, 7 * 24 * 60 * 60);
+      await this.redisService.addToBlacklist(tokenId, ttl); // Access token blacklist
+      await this.redisService.blacklistRefreshToken(tokenId, ttl); // Refresh token blacklist
     }
 
     // Xóa tất cả tokens khỏi whitelist
@@ -190,7 +207,7 @@ export class TokenService {
     // Xóa session user
     await this.redisService.removeUserSession(userId);
 
-    this.logger.log(`Revoked all tokens for user ${userId}`);
+    this.logger.log(`Revoked ALL access and refresh tokens for user ${userId} (${activeTokens.length} token pairs)`);
   }
 
   async getUserFromToken(token: string): Promise<AuthUser | null> {

@@ -12,6 +12,7 @@ import {
   LogoutResponse,
 } from '../dto';
 import { User } from '../../users/entities/user.entity';
+import { AuthUser } from '../interfaces/jwt-payload.interface';
 
 @Resolver()
 export class AuthResolver {
@@ -43,20 +44,21 @@ export class AuthResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => LogoutResponse)
   async logout(@Context() context): Promise<LogoutResponse> {
-    const user = context.req.user;
+    const user: AuthUser = context.req.user;
     return this.authService.logout(user.userId, user.tokenId);
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => LogoutResponse)
   async logoutAll(@Context() context): Promise<LogoutResponse> {
-    const user = context.req.user;
+    const user: AuthUser = context.req.user;
     return this.authService.logoutAll(user.userId);
   }
 
   @UseGuards(GqlAuthGuard)
   @Query(() => User)
   async me(@Context() context): Promise<User> {
-    return context.req.user;
+    const authUser = context.req.user;
+    return this.authService.getCurrentUser(authUser.userId);
   }
 }

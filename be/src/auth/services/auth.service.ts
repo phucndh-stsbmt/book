@@ -128,10 +128,21 @@ export class AuthService {
 
   async logout(userId: number, tokenId: string) {
     try {
-      // Revoke current token
+      // Kiểm tra token đã bị revoked chưa (check cả access và refresh token)
+      const isAccessTokenRevoked = await this.redisService.isInBlacklist(tokenId);
+      const isRefreshTokenRevoked = await this.redisService.isInBlacklist(tokenId);
+      
+      if (isAccessTokenRevoked || isRefreshTokenRevoked) {
+        this.logger.warn(`Token pair ${tokenId} is already revoked`);
+        return { 
+          message: 'Token Revoked',
+        };
+      }
+
+      // Revoke cả cặp tokens (access + refresh)
       await this.tokenService.revokeToken(userId, tokenId);
       
-      this.logger.log(`User ${userId} logged out successfully`);
+      this.logger.log(`User ${userId} logged out successfully - revoked token pair ${tokenId}`);
       
       return { 
         message: 'Logged out successfully',

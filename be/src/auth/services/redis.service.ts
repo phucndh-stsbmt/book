@@ -168,4 +168,17 @@ export class RedisService implements OnModuleInit {
     const role = await this.getUserRole(userId);
     return role === 'admin';
   }
+
+  // Blacklist refresh token riêng (sử dụng prefix khác)
+  async blacklistRefreshToken(tokenId: string, ttl: number): Promise<void> {
+    const key = `refresh_blacklist:${tokenId}`;
+    await this.client.setex(key, ttl, '1');
+  }
+
+  // Kiểm tra refresh token có bị blacklist không
+  async isRefreshTokenBlacklisted(tokenId: string): Promise<boolean> {
+    const key = `refresh_blacklist:${tokenId}`;
+    const result = await this.client.get(key);
+    return result === '1';
+  }
 }

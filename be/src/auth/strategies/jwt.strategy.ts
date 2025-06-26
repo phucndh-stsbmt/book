@@ -4,8 +4,9 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TokenService } from '../services/token.service';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { JwtPayload, AuthUser } from '../interfaces/jwt-payload.interface';
 import { RedisService } from '../services/redis.service';
+import { TokenRevokedException } from '../exceptions/token-revoked.exception';
 import { User } from '../../users/entities/user.entity';
 
 @Injectable()
@@ -23,15 +24,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
-    // Check if token is blacklisted (if Redis is available)
-    try {
-      const isBlacklisted = await this.redisService.isInBlacklist(payload.jti);
-      if (isBlacklisted) {
-        throw new UnauthorizedException('Token has been revoked');
-      }
-    } catch (error) {
-      console.log('Redis check failed, skipping blacklist validation:', error);
+  async validate(payload: JwtPayload): Promise<AuthUser> {
+    // Check if token is blacklisted - ALWAYS check, not optional
+    const isBlacklisted = await this.redisService.isInBlacklist(payload.jti);
+    if (isBlacklisted) {
+      throw new TokenRevokedException();
     }
 
     // Fetch full User entity from database
@@ -56,7 +53,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('User not found');
     }
 
-    console.log('JWT Strategy - User entity fetched:', user);
-    return user;
+    // Return AuthUser format instead of User entity
+    const authUser: AuthUser = {
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+      tokenId: payload.jti
+    };
+
+    console.log('JWT Strategy - AuthUser created:', authUser);
+    return authUser;
   }
 }
