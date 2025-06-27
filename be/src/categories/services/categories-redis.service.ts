@@ -51,7 +51,14 @@ export class CategoriesRedisService implements OnModuleInit {
       const cached = await this.client.get(cacheKey);
       if (cached) {
         this.logger.log('Categories retrieved from cache');
-        return JSON.parse(cached) as Category[];
+      const categories = JSON.parse(cached) as Category[];
+      
+      // Convert date strings back to Date objects
+      return categories.map(category => ({
+        ...category,
+        createdAt: new Date(category.createdAt),
+        updatedAt: new Date(category.updatedAt),
+      }));
       }
       return null;
     } catch (error) {
@@ -82,7 +89,12 @@ export class CategoriesRedisService implements OnModuleInit {
       const cached = await this.client.get(cacheKey);
       if (cached) {
         this.logger.log(`Category ${id} retrieved from cache`);
-        return JSON.parse(cached) as Category;
+        const category = JSON.parse(cached) as Category;
+        return {
+          ...category,
+          createdAt: new Date(category.createdAt),
+          updatedAt: new Date(category.updatedAt),
+        };
       }
       return null;
     } catch (error) {

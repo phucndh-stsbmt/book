@@ -9,6 +9,7 @@ type Author {
   dateOfDeath: DateTime
   id: Int!
   imageUrl: String
+  isActive: Boolean!
   name: String!
   nationality: String!
   updatedAt: DateTime!
@@ -53,6 +54,7 @@ input CreateAuthorInput {
   dateOfBirth: DateTime!
   dateOfDeath: DateTime
   imageUrl: String
+  isActive: Boolean! = true
   name: String!
   nationality: String!
 }
@@ -143,7 +145,7 @@ type Mutation {
   removeCategory(id: Int!): Category!
   removePublisher(id: Int!): Publisher!
   removeUser(id: Int!): User!
-  updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
+  updateAuthor(id: Int!, updateAuthorInput: UpdateAuthorInput!): Author!
   updateBook(updateBookInput: UpdateBookInput!): Book!
   updateBookAuthor(updateBookAuthorInput: UpdateBookAuthorInput!): BookAuthor!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
@@ -153,11 +155,13 @@ type Mutation {
 
 type Publisher {
   address: String
+  createdAt: DateTime!
   email: String
   id: Int!
   isActive: Boolean
   name: String!
   phone: String
+  updatedAt: DateTime!
 }
 
 type Query {
@@ -195,8 +199,8 @@ input UpdateAuthorInput {
   biography: String
   dateOfBirth: DateTime
   dateOfDeath: DateTime
-  id: Int!
   imageUrl: String
+  isActive: Boolean
   name: String
   nationality: String
 }

@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateAuthorInput {
@@ -32,4 +32,9 @@ export class CreateAuthorInput {
   @IsOptional()
   @IsDate()
   dateOfDeath: Date;
+
+  @Field(() => Boolean, { defaultValue: true })
+  @IsOptional()
+  @IsBoolean()
+  isActive: boolean;
 }

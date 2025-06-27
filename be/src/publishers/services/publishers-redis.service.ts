@@ -45,7 +45,12 @@ export class PublishersRedisService implements OnModuleInit {
       const cached = await this.client.get(cacheKey);
       if (cached) {
         this.logger.log('Publishers retrieved from cache');
-        return JSON.parse(cached) as Publisher[];
+        const publishers = JSON.parse(cached) as Publisher[];
+        return publishers.map(publisher => ({
+          ...publisher,
+          createdAt: new Date(publisher.createdAt),
+          updatedAt: new Date(publisher.updatedAt),
+        }));
       }
       return null;
     } catch (error) {
@@ -70,7 +75,12 @@ export class PublishersRedisService implements OnModuleInit {
       const cached = await this.client.get(cacheKey);
       if (cached) {
         this.logger.log(`Publisher ${id} retrieved from cache`);
-        return JSON.parse(cached) as Publisher;
+        const publisher = JSON.parse(cached) as Publisher;
+        return {
+          ...publisher,
+          createdAt: new Date(publisher.createdAt),
+          updatedAt: new Date(publisher.updatedAt),
+        };
       }
       return null;
     } catch (error) {

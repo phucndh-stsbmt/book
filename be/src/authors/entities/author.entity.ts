@@ -45,4 +45,8 @@ export class Author {
   @Field(() => Date)
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Field(() => Boolean, { defaultValue: true })
+  @Column({ default: true })
+  isActive: boolean;
 }
