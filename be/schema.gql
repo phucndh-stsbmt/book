@@ -68,7 +68,7 @@ input CreateBookInput {
   categoryId: Int!
   coverImageUrl: String
   description: String!
-  isActive: Boolean!
+  isActive: Boolean! = true
   isbn: String!
   language: String!
   page: Float!
@@ -216,7 +216,7 @@ input UpdateBookInput {
   coverImageUrl: String
   description: String
   id: Int!
-  isActive: Boolean
+  isActive: Boolean = true
   isbn: String
   language: String
   page: Float

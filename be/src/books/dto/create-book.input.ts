@@ -55,8 +55,8 @@ export class CreateBookInput {
   @IsString()
   coverImageUrl?: string;
 
-  @Field(() => Boolean)
-  @IsNotEmpty()
+  @Field(() => Boolean, { defaultValue: true })
+  @IsOptional()
   @IsBoolean()
   isActive: boolean;
 

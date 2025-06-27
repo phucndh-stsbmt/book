@@ -54,9 +54,10 @@ export class Book {
   @Column({ nullable: true })
   coverImageUrl: string;
 
-  @Field(() => Boolean)
-  @Column()
+  @Field(() => Boolean, { defaultValue: true })
+  @Column({ default: true })
   isActive: boolean;
+
 
   @Field(() => Category)
   @ManyToOne(() => Category)
